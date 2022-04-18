@@ -76,7 +76,7 @@ def run_iteration(df, q, t, i, to_header, to_columns, to_impulse):
     fig2 = cognitive_model.draw_graph()
     fig_col2.pyplot(fig2)
 
-    return list(map(int, re.findall(r'\d+', to_remove)))
+    return list(map(int, re.findall(r'\d+', to_remove))), fig1, fig2
 
 
 def main():
@@ -106,7 +106,7 @@ def main():
                 st.subheader("Видалені зв'язки")
 
                 while True:
-                    to_remove = run_iteration(df, q, t, step, to_header, to_columns,
+                    to_remove, fig1, fig2 = run_iteration(df, q, t, step, to_header, to_columns,
                                               to_impulse)
                     for i in range(len(to_remove) - 1):
                         df.iloc[to_remove[i], to_remove[i + 1]] = 0
@@ -118,6 +118,10 @@ def main():
 
                     if not len(to_remove):
                         break
+
+                time.sleep(5)
+                plt.close(fig1)
+                plt.close(fig2)
         else:
             st.error('Введено вектор неправильної розмірності')
 
